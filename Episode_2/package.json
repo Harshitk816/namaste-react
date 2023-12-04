@@ -1,0 +1,26 @@
+{
+  "name": "episode_2",
+  "version": "1.0.0",
+  "description": "this is namaste react episode 2 by akshay saini",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harshitk816/namaste-react.git"
+  },
+  "keywords": [
+    "react",
+    "namaste-react"
+  ],
+  "author": "Harshit Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harshitk816/namaste-react/issues"
+  },
+  "homepage": "https://github.com/Harshitk816/namaste-react#readme",
+  "devDependencies": {
+    "parcel": "^2.10.3"
+  }
+}
