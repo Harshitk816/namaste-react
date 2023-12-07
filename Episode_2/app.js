@@ -1,6 +1,8 @@
 /*const heading=React.createElement("h1",
 {id:"heading1"},
 "Hello World from React")*/
+import React from "react"
+import  ReactDOM  from "react-dom/client"
 const parent =React.createElement(//creating nested elements
     "div",
     {id:"parent"},
@@ -19,5 +21,5 @@ const parent =React.createElement(//creating nested elements
         React.createElement("h2",{},"I'm an h2 Tag")]
         )]
     )
-const root=ReactDOM.createRoot(document.getElementById("root"))
+const root=ReactDOM.createRoot(document.getElementById("root"));
 root.render(parent)
