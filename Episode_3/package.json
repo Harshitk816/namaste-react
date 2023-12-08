@@ -1,0 +1,25 @@
+{
+  "name": "episode_3",
+  "version": "1.0.0",
+  "description": "laying the foundation",
+  
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"parcel index.html",
+    "build":"parcel build index.html"
+  },
+  "keywords": [
+    "react",
+    "react-dom"
+  ],
+  "author": "Harshit Sharma",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.10.3",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
