@@ -1,6 +1,6 @@
 import RestarauntCard from "./RestarauntCard";
-import { resList } from "../utils/mockData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Shimmer from "./Shimmer";
 
 
 const Body=()=>{
@@ -53,22 +53,54 @@ const Body=()=>{
     
 // ]
 //State Variable -super powerful variable
-const [restaurantList, setRestaurantList]=useState(resList);
+const [restaurantList, setRestaurantList]=useState([]);
+const [filteredRestaraunt,setFilteredList]=useState([]);
+const [searchText,setSearchText]=useState("");//search box value
 
+
+//fetching data from live swiggy api
+ useEffect(()=>{fetchData()},[])
+
+ const fetchData=async()=>{//async await
+    const data =await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9304278&lng=77.678404&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+
+    const json=await data.json();
+    console.log(json);
+    setRestaurantList(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)//optional chaining
+    setFilteredList(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+ }
+//conditional rendering
+ if(restaurantList.length===0){
+return(
+    <Shimmer/>
+)
+ }
 return(
 
     <div className="body">
-        <div className="search"> Search</div>
         <div className="filter">
+        <div className="search"> 
+            <input type="text" className="search-box" value={searchText} onChange={(e)=>{
+                setSearchText(e.target.value);
+                }}
+                 placeholder="Search Restaurants..."
+            ></input>
+            <button onClick={()=>{
+                const filteredRestaraunt=restaurantList.filter(
+                    (res)=>res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                    );
+                setFilteredList(filteredRestaraunt);
+            }}>Search</button>
+        </div>
             <button className="filter-btn" onClick={()=>{
                 const filterList=restaurantList.filter(
-                    (restaurant)=>restaurant.info.avgRating>4.0);
-                setRestaurantList(filterList);
+                    (restaurant)=>restaurant.info.avgRating>4);
+                setFilteredList(filterList);
                 }} >Top Rated Restaraunts</button>
         </div>
         <div className="res-container" >
             { //not using keys(not acceptable)<<index as key<<unique id(best practice)
-                restaurantList.map((restaurant)=><RestarauntCard key={restaurant.info.id} resData={restaurant}/>)
+                filteredRestaraunt.map((restaurant)=><RestarauntCard key={restaurant.info.id} resData={restaurant}/>)
             }     
         </div>
     </div>
