@@ -1,10 +1,15 @@
 import RestarauntCard from "./RestarauntCard";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
+import { SWIGGY_API } from "../utils/constants";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import useRestarauntList from "../utils/useRestarauntList";
 
 
 const Body=()=>{
     //normal JS variable 
+
 // let restaurantList=[{
 //     "info": {
 //       "id": "5934",
@@ -53,7 +58,7 @@ const Body=()=>{
     
 // ]
 //State Variable -super powerful variable
-const [restaurantList, setRestaurantList]=useState([]);
+const restaurantList=useRestarauntList(); //getting restarauntList from SWIGGY API
 const [filteredRestaraunt,setFilteredList]=useState([]);
 const [searchText,setSearchText]=useState("");//search box value
 
@@ -62,13 +67,23 @@ const [searchText,setSearchText]=useState("");//search box value
  useEffect(()=>{fetchData()},[])
 
  const fetchData=async()=>{//async await
-    const data =await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9304278&lng=77.678404&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
-
+    const data =await fetch(SWIGGY_API);
     const json=await data.json();
     console.log(json);
-    setRestaurantList(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)//optional chaining
-    setFilteredList(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+ 
+    setFilteredList(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)  //optional chaining
  }
+
+
+ //checks for online status
+ const onlineStatus=useOnlineStatus();
+ if(onlineStatus===false){
+    return(
+        <h1>Looks like you are Offline. Check your internet connection and try again.</h1>
+    )
+ }
+
+
 //conditional rendering
  if(restaurantList.length===0){
 return(
@@ -100,7 +115,8 @@ return(
         </div>
         <div className="res-container" >
             { //not using keys(not acceptable)<<index as key<<unique id(best practice)
-                filteredRestaraunt.map((restaurant)=><RestarauntCard key={restaurant.info.id} resData={restaurant}/>)
+                filteredRestaraunt.map((restaurant)=>
+                <Link key={restaurant.info.id} to={"/restaraunts/"+restaurant.info.id}><RestarauntCard resData={restaurant}/></Link>)
             }     
         </div>
     </div>
